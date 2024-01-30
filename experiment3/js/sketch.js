@@ -1,67 +1,68 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
 
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
+//'use strict';
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+var sketch = function(p) {
+    var agents = [];
+    var agentCount = 400;
+    var noiseScale = 600;
+    var noiseStrength = 20;
+    var overlayAlpha = 5;
+    var agentAlpha = 180;
+    var strokeWidth = 0.6;
+    var drawMode = 1;
+    
+    var actRandomSeed = 0;
+    var fillNum =0;
+    var R = 0;
+    var G = 0;
+    var B = 0;
+  
+    p.setup = function() {
+      p.createCanvas(p.windowWidth, p.windowHeight);
+  
+      for (var i = 0; i < agentCount; i++) {
+        agents[i] = new Agent();
+      }
+    };
+  
+    p.draw = function() {
+      
+      p.background(R,G,B);
+      
+      p.fill(fillNum, overlayAlpha);
+      //p.fill(100,255,255);
+      p.noStroke();
+      p.rect(0, 0, p.width, p.height);
+  
+      // Draw agents
+      p.stroke(100, 100, 100);
+      for (var i = 0; i < agentCount; i++) {
+        if (drawMode == 1) agents[i].update1(noiseScale, noiseStrength, strokeWidth);
+        else agents[i].update2(noiseScale, noiseStrength, strokeWidth);
+      }
+      
+      fillNum = p.random(0,255);
+      
+      R = p.random(-0,20);
+      G = p.random(-0,20);
+      B = p.random(-0,20);
+      
+      
+    };
+    
+  
+    p.keyReleased = function() {
+      if (p.key == 's' || p.key == 'S') p.saveCanvas(gd.timestamp(), 'png');
+      if (p.key == '1') drawMode = 1;
+      if (p.key == '2') drawMode = 2;
+      if (p.key == ' ') {
+        var newNoiseSeed = p.floor(p.random(10000));
+        p.noiseSeed(newNoiseSeed);
+      }
+      if (p.keyCode == p.DELETE || p.keyCode == p.BACKSPACE) p.background(255);
+    };
+  };
+  
+  var myp5 = new p5(sketch);
 
-// Globals
-let myInstance;
-let canvasContainer;
-
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
-
-    myMethod() {
-        // code to run when method is called
-    }
-}
-
-// setup() function is called once when the program starts
-function setup() {
-    // place our canvas, making it fit our container
-    canvasContainer = $("#canvas-container");
-    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-    canvas.parent("canvas-container");
-    // resize canvas is the page is resized
-    $(window).resize(function() {
-        console.log("Resizing...");
-        resizeCanvas(canvasContainer.width(), canvasContainer.height());
-    });
-    // create an instance of the class
-    myInstance = new MyClass(VALUE1, VALUE2);
-
-    var centerHorz = windowWidth / 2;
-    var centerVert = windowHeight / 2;
-}
-
-// draw() function is called repeatedly, it's the main animation loop
-function draw() {
-    background(220);    
-    // call a method on the instance
-    myInstance.myMethod();
-
-    // Put drawings here
-    var centerHorz = canvasContainer.width() / 2 - 125;
-    var centerVert = canvasContainer.height() / 2 - 125;
-    fill(234, 31, 81);
-    noStroke();
-    rect(centerHorz, centerVert, 250, 250);
-    fill(255);
-    textStyle(BOLD);
-    textSize(140);
-    text("p5*", centerHorz + 10, centerVert + 200);
-}
-
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
-}
+  
