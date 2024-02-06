@@ -1,67 +1,64 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
+let video;
+var btnPlay;
+var btnPause;
+let muteStatus = 0;
 
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+function setup(){
+	//createCanvas(600, 400);
+	
+	canvasContainer = $("#canvas-container");
+	let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
+	canvas.parent("canvas-container");
 
-// Globals
-let myInstance;
-let canvasContainer;
+	$(window).resize(function(){
+		console.log("working");
+		resizeCanvas(canvasContainer.width(), canvasContainer.height());
+	})
+	let width = canvasContainer.width();
+	let height = canvasContainer.height();
+	video = createVideo('../../img/cat.mp4');
+	video.loop();
+	video.hide();
+	video.volume(0.5);
+	
+	btnPlay = createButton('play');
+	btnPlay.position(width*.1, height*2);
+	btnPlay.mouseClicked(playVid);
+	btnPause = createButton('pause');
+	btnPause.position(width*.2, height*2);
+	btnPause.mouseClicked(pauseVid);
+	btnMute = createButton('mute');
+	btnMute.position(width*.3, height*2);
+	btnMute.mouseClicked(muteVideo);
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
 
-    myMethod() {
-        // code to run when method is called
-    }
+	video.showControls();
+
 }
 
-// setup() function is called once when the program starts
-function setup() {
-    // place our canvas, making it fit our container
-    canvasContainer = $("#canvas-container");
-    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-    canvas.parent("canvas-container");
-    // resize canvas is the page is resized
-    $(window).resize(function() {
-        console.log("Resizing...");
-        resizeCanvas(canvasContainer.width(), canvasContainer.height());
-    });
-    // create an instance of the class
-    myInstance = new MyClass(VALUE1, VALUE2);
-
-    var centerHorz = windowWidth / 2;
-    var centerVert = windowHeight / 2;
+function draw(){
+	background('black');
+	image(video, 0, 0, width, height);
 }
 
-// draw() function is called repeatedly, it's the main animation loop
-function draw() {
-    background(220);    
-    // call a method on the instance
-    myInstance.myMethod();
-
-    // Put drawings here
-    var centerHorz = canvasContainer.width() / 2 - 125;
-    var centerVert = canvasContainer.height() / 2 - 125;
-    fill(234, 31, 81);
-    noStroke();
-    rect(centerHorz, centerVert, 250, 250);
-    fill(255);
-    textStyle(BOLD);
-    textSize(140);
-    text("p5*", centerHorz + 10, centerVert + 200);
+function playVid(){
+	video.play();
 }
 
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+function pauseVid(){
+	video.pause();
 }
+
+function muteVideo() {
+	if(muteStatus == 0){
+		video.volume(0);
+		muteStatus = 1;
+	}
+	else{
+		video.volume(100);
+		muteStatus = 1;
+	}
+
+  }
+  
