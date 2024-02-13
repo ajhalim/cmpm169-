@@ -17,7 +17,7 @@ function setup(){
 	})
 	let width = canvasContainer.width();
 	let height = canvasContainer.height();
-	video = createVideo('../../img/cat.mp4');
+	video = createVideo('./js/cat.mp4');
 	video.loop();
 	video.hide();
 	video.volume(0.5);
